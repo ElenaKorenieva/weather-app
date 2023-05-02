@@ -1,35 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import Searchbar from "./components/Searchbar/Searchbar";
+import { useEffect, useState } from "react";
+import { getCityLocation } from "./services/apiCities";
+import { getCurrentWeather } from "./services/apiCurrentWeather";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [city, setCity] = useState("");
+  const [error, setError] = useState(null);
+  const [location, setLocation] = useState({
+    lat: null,
+    lon: null,
+  });
+
+  const getCityName = (query) => {
+    setCity(query);
+  };
+
+  useEffect(() => {
+    if (city) {
+      setCityApi();
+    }
+    async function setCityApi() {
+      try {
+        const data = await getCityLocation(city);
+        setLocation({ lat: data[0].lat, lon: data[0].lon });
+
+        if (data.length === 0) {
+          throw new Error("No cities found");
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  }, [city]);
+
+  useEffect(() => {
+    if (location.lat && location.lon) {
+      setCurrentWeather();
+    }
+
+    async function setCurrentWeather() {
+      try {
+        // const { lat, lon } = location;
+        const data = await getCurrentWeather(location);
+        console.log(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  }, [location]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Searchbar getCityName={getCityName} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
