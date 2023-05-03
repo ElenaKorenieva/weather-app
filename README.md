@@ -4,3 +4,4 @@
 
 - React;
 - Vite;
+- axios;

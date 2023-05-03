@@ -17,6 +17,21 @@ export const getCurrentWeather = async ({ lat, lon }) => {
   return data;
 };
 
+export const getFiveDaysWeather = async ({ lat, lon }) => {
+  const { data } = await axios.get(
+    "https://api.openweathermap.org/data/2.5/forecast",
+    {
+      params: {
+        lat,
+        lon,
+        appid: API_KEY,
+      },
+    }
+  );
+  return data;
+};
+
+
 getCurrentWeather.propTypes = {
   lat: PropTypes.number.isRequired,
   lon: PropTypes.number.isRequired,

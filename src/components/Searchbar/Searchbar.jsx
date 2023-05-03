@@ -19,9 +19,7 @@ const Searchbar = ({ getCityName }) => {
         onChange={(e) => setQuery(e.target.value)}
       />
       <button>
-        <svg width={35} height={35}>
-          <use href={Icon}></use>
-        </svg>
+        <img src={Icon} alt="search" />
       </button>
     </form>
   );
