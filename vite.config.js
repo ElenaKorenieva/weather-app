@@ -5,7 +5,15 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/weather-app/",
+  base: "/",
+  resolve: {
+    alias: {
+      components: "/src/components",
+      pages: "/src/pages",
+      services: "/src/services",
+      assets: "/src/assets",
+    },
+  },
   // resolve: {
   //   alias: {
   //     "@": path.resolve(__dirname, "./src/components"),

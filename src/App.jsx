@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import Searchbar from "./components/Searchbar/Searchbar";
 import { useEffect, useState } from "react";
 import { getCityLocation } from "./services/apiCities";
@@ -7,7 +7,12 @@ import {
   getFiveDaysWeather,
 } from "./services/apiCurrentWeather";
 import { getPicturesApi } from "./services/apiPictures";
-import { getQuotesApi } from "./services/apiQuotes";
+import { NavLink, Route, Routes } from "react-router-dom";
+import Home from "pages/Home/Home";
+import FiveDays from "pages/FiveDays/FiveDays";
+import HoursWeather from "pages/HoursWeather/HoursWeather";
+import HoursChart from "pages/HoursChart/HoursChart";
+import NotFound from "pages/NotFound/NotFound";
 
 function App() {
   const [city, setCity] = useState("");
@@ -72,27 +77,27 @@ function App() {
     }
   }
 
-  async function getQuotes() {
-    try {
-      const data = await getQuotesApi();
-      console.log("quotes", data);
-    } catch (error) {
-      setError(error.message);
-    }
-  }
-
   return (
     <>
+      <nav>
+        <NavLink to="/">TODAY</NavLink>
+        <NavLink to="/fiveDays" onClick={getFiveDays} disabled={!city}>
+          5 DAYS
+        </NavLink>
+      </nav>
       <Searchbar getCityName={getCityName} />
-      <button type="button" onClick={getFiveDays} disabled={!city}>
-        5 DAYS
-      </button>
       <button type="button" onClick={getBackground}>
         Pictures
       </button>
-      <button type="button" onClick={getQuotes}>
-        Quotes
-      </button>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/fiveDays" element={<FiveDays />}>
+          <Route path="hours" element={<HoursWeather />}>
+            <Route path="chart" element={<HoursChart />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   );
 }
