@@ -1,11 +1,8 @@
 import "./App.scss";
 import Searchbar from "./components/Searchbar/Searchbar";
 import { useEffect, useState } from "react";
-import { getCityLocation } from "./services/apiCities";
-import {
-  getCurrentWeather,
-  getFiveDaysWeather,
-} from "./services/apiCurrentWeather";
+
+import { getFiveDaysWeather } from "./services/apiCurrentWeather";
 import { getPicturesApi } from "./services/apiPictures";
 import { NavLink, Route, Routes } from "react-router-dom";
 import Home from "pages/Home/Home";
@@ -13,14 +10,15 @@ import FiveDays from "pages/FiveDays/FiveDays";
 import HoursWeather from "pages/HoursWeather/HoursWeather";
 import HoursChart from "pages/HoursChart/HoursChart";
 import NotFound from "pages/NotFound/NotFound";
+import { getCityLocation } from "services/apiCities";
 
 function App() {
   const [city, setCity] = useState("");
-  const [error, setError] = useState(null);
   const [location, setLocation] = useState({
     lat: null,
     lon: null,
   });
+  const [error, setError] = useState(null);
 
   const getCityName = (query) => {
     setCity(query);
@@ -43,22 +41,6 @@ function App() {
       }
     }
   }, [city]);
-
-  useEffect(() => {
-    if (location.lat && location.lon) {
-      setCurrentWeather();
-    }
-
-    async function setCurrentWeather() {
-      try {
-        // const { lat, lon } = location;
-        const data = await getCurrentWeather(location);
-        console.log(data);
-      } catch (error) {
-        setError(error.message);
-      }
-    }
-  }, [location]);
 
   async function getFiveDays() {
     try {
@@ -90,7 +72,7 @@ function App() {
         Pictures
       </button>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home city={city} location={location} />} />
         <Route path="/fiveDays" element={<FiveDays />}>
           <Route path="hours" element={<HoursWeather />}>
             <Route path="chart" element={<HoursChart />} />

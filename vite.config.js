@@ -12,6 +12,7 @@ export default defineConfig({
       pages: "/src/pages",
       services: "/src/services",
       assets: "/src/assets",
+      utils: "/src/utils",
     },
   },
   // resolve: {

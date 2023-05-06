@@ -1,34 +1,42 @@
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { getQuotesApi } from "services/apiQuotes";
+import Location from "components/Location/Location";
+import { getCurrentWeather } from "services/apiCurrentWeather";
+import QoutesItem from "components/QuotesItem/QuotesItem";
+import {
+  formatDayOfMonth,
+  formatShortDayOfWeek,
+  formatMonth,
+  formatClockShort,
+} from "utils/formatDate";
+import Clock from "components/Clock/Clock";
 
-const Home = ({
-  iconWeather,
-  city = "Kyiv",
-  country,
-  temp,
-  temp_min,
-  temp_max,
-  sunrise,
-  sunset,
-}) => {
-  const defaultQuote = {
-    author: "Thomas Edison",
-    authorSlug: "thomas-edison",
-    content: "As a cure for worrying, work is better than whisky.",
-    dateAdded: "2023-04-14",
-    dateModified: "2023-04-14",
-    length: 51,
-    tags: ["Humorous"],
-    _id: "bfNpGC2NI",
-  };
+const Home = ({ city, location }) => {
+  const [dayWeather, setDayWeather] = useState({});
+
   const [error, setError] = useState(null);
-
-  const [quotes, setQuotes] = useState([defaultQuote]);
+  const [quotes, setQuotes] = useState([]);
 
   useEffect(() => {
-    if (!city) {
-      return;
+    if (location.lat && location.lon) {
+      setCurrentWeather();
     }
+
+    async function setCurrentWeather() {
+      try {
+        // const { lat, lon } = location;
+        const data = await getCurrentWeather(location);
+        setDayWeather(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  }, [location]);
+
+  console.log(dayWeather);
+
+  useEffect(() => {
     async function getQuotes() {
       try {
         const data = await getQuotesApi();
@@ -38,41 +46,49 @@ const Home = ({
       }
     }
     getQuotes();
-  }, [city]);
+  }, []);
 
-  console.log(quotes);
+  const date = new Date().toJSON();
 
   return (
     <>
+      {city && <Location city={city} country={dayWeather?.sys?.country} />}
       <div>
-        <img src={iconWeather} alt={iconWeather} />
-        <h2>{`${city}, ${country}`}</h2>
+        <p>{Math.round(dayWeather?.main?.temp) || null}</p>
         <div>
-          <p>{temp}</p>
-          <div>
-            <p>min</p>
-            <p>{temp_min}</p>
-            <p>max</p>
-            <p>{temp_max}</p>
-          </div>
+          <p>min</p>
+          <p>{Math.round(dayWeather?.main?.temp_min) || null}</p>
+        </div>
+        <div>
+          <p>max</p>
+          <p>{Math.round(dayWeather?.main?.temp_max) || null}</p>
         </div>
       </div>
-      <div>
-        <ul>
-          <li>{Date.now()}</li>
-          <li>{Date.now()}</li>
-          <li>{Date.now()}</li>
-          <li>{Date.now()}</li>
-          <li>{sunrise}</li>
-          <li>{sunset}</li>
-        </ul>
-      </div>
-      <div>
-        <p>{quotes[0].content}</p>
-        <p>{quotes[0].author}</p>
-      </div>
+
+      <ul>
+        <li>{formatDayOfMonth(date)}</li>
+        <li>{formatShortDayOfWeek(date)}</li>
+        <li>{formatMonth(date)}</li>
+        <li>
+          <Clock />
+        </li>
+        <li>
+          {dayWeather?.sys?.sunrise &&
+            formatClockShort(new Date(dayWeather?.sys?.sunrise * 1000))}
+        </li>
+        <li>
+          {dayWeather?.sys?.sunset &&
+            formatClockShort(new Date(dayWeather?.sys?.sunset * 1000))}
+        </li>
+      </ul>
+      <QoutesItem data={quotes} />
     </>
   );
 };
 
 export default Home;
+
+Home.propTypes = {
+  city: PropTypes.string,
+  location: PropTypes.object,
+};
