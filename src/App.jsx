@@ -79,14 +79,17 @@ function App() {
   return (
     <Wrapper background={pictureBg}>
       <nav>
-        <NavLink to="/">TODAY</NavLink>
+        <NavLink to="/weather-app">TODAY</NavLink>
         <NavLink to="/fiveDays" onClick={getFiveDays} disabled={!city}>
           5 DAYS
         </NavLink>
       </nav>
       <Searchbar getCityName={getCityName} />
       <Routes>
-        <Route path="/" element={<Home city={city} location={location} />} />
+        <Route
+          path="/weather-app"
+          element={<Home city={city} location={location} />}
+        />
         <Route path="/fiveDays" element={<FiveDays />}>
           <Route path="hours" element={<HoursWeather />}>
             <Route path="chart" element={<HoursChart />} />
