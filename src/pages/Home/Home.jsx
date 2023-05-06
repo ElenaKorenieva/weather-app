@@ -11,6 +11,7 @@ import {
   formatClockShort,
 } from "utils/formatDate";
 import Clock from "components/Clock/Clock";
+import IconSelector from "components/IconSelector/IconSelector";
 
 const Home = ({ city, location }) => {
   const [dayWeather, setDayWeather] = useState({});
@@ -52,6 +53,7 @@ const Home = ({ city, location }) => {
 
   return (
     <>
+      {city && <IconSelector icon={dayWeather?.weather?.[0]?.main} />}
       {city && <Location city={city} country={dayWeather?.sys?.country} />}
       <div>
         <p>{Math.round(dayWeather?.main?.temp) || null}</p>
@@ -73,12 +75,18 @@ const Home = ({ city, location }) => {
           <Clock />
         </li>
         <li>
-          {dayWeather?.sys?.sunrise &&
-            formatClockShort(new Date(dayWeather?.sys?.sunrise * 1000))}
+          {dayWeather?.sys?.sunrise && (
+            <span>
+              {formatClockShort(new Date(dayWeather?.sys?.sunrise * 1000))}
+            </span>
+          )}
         </li>
         <li>
-          {dayWeather?.sys?.sunset &&
-            formatClockShort(new Date(dayWeather?.sys?.sunset * 1000))}
+          {dayWeather?.sys?.sunset && (
+            <span>
+              {formatClockShort(new Date(dayWeather?.sys?.sunset * 1000))}
+            </span>
+          )}
         </li>
       </ul>
       <QoutesItem data={quotes} />
