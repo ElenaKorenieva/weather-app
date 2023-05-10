@@ -17,6 +17,7 @@ function App() {
     lon: null,
   });
   const [pictureBg, setPictureBg] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
 
   const getCityName = (query) => {
