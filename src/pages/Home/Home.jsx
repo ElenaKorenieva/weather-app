@@ -16,6 +16,7 @@ import IconSelector from "components/IconSelector/IconSelector";
 const Home = ({ city, location }) => {
   const [dayWeather, setDayWeather] = useState({});
 
+  // eslint-disable-next-line no-unused-vars;
   const [error, setError] = useState(null);
   const [quotes, setQuotes] = useState([]);
 

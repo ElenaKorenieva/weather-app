@@ -7,6 +7,7 @@ import Location from "../../components/Location/Location";
 
 const FiveDaysWeather = ({ city, location }) => {
   const [weatherFiveDays, setWeatherFiveDays] = useState([]);
+  // eslint-disable-next-line no-unused-vars;
   const [error, setError] = useState("");
 
   useEffect(() => {
