@@ -23,3 +23,7 @@ export const formatClock = (date) => {
 export const formatClockShort = (date) => {
   return format(Date.parse(date), "HH:mm");
 };
+
+export const formatDayAndMonth = (date) => {
+  return format(Date.parse(date), "dd LLL");
+};

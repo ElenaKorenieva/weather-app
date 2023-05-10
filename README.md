@@ -3,5 +3,7 @@
 # Tech Stack
 
 - React;
-- Vite;
 - axios;
+- prop-types;
+- Sass;
+- date-fns;

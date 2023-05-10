@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import Icon from "../../assets/location.svg";
+import { ReactComponent as LocationIcon } from "../../assets/service-icons/location.svg";
+import { ReactComponent as FavoritesIcon } from "../../assets/service-icons/Star.svg";
 
 const Searchbar = ({ getCityName }) => {
   const [query, setQuery] = useState("");
@@ -12,14 +13,18 @@ const Searchbar = ({ getCityName }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <button>
+        <LocationIcon type="submit" />
+      </button>
       <input
-        type="text"
+        type="search"
         name="search"
+        placeholder="Enter the city"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <button>
-        <img src={Icon} alt="search" />
+      <button type="button">
+        <FavoritesIcon />
       </button>
     </form>
   );
