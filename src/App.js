@@ -9,6 +9,7 @@ import NotFound from "pages/NotFound/NotFound";
 import { useEffect, useState } from "react";
 import { getPicturesApi } from "services/apiPictures";
 import { getCityLocation } from "services/apiCities";
+import { getUserLocation } from "services/apiUserLocation";
 
 function App() {
   const [city, setCity] = useState("");
@@ -23,6 +24,20 @@ function App() {
   const getCityName = (query) => {
     setCity(query.trim());
   };
+
+  useEffect(() => {
+    if (!city) {
+      userLocation();
+    }
+    async function userLocation() {
+      try {
+        const data = await getUserLocation();
+        setCity(data);
+      } catch (error) {
+        throw new Error();
+      }
+    }
+  }, [city]);
 
   useEffect(() => {
     if (city) {
