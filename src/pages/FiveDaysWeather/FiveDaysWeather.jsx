@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import PropTypes from "prop-types";
 import { getFiveDaysWeather } from "services/apiCurrentWeather";
 import WeatherItem from "components/WeatherItem/WeatherItem";
 import Location from "../../components/Location/Location";
+import { useSetLocation } from "context/LocationProvider";
 
-const FiveDaysWeather = ({ city, location }) => {
+const FiveDaysWeather = () => {
+  const { city, location } = useSetLocation();
   const [weatherFiveDays, setWeatherFiveDays] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState("");
@@ -18,7 +19,6 @@ const FiveDaysWeather = ({ city, location }) => {
       try {
         const data = await getFiveDaysWeather(location);
         setWeatherFiveDays(data);
-        console.log("five days", data);
       } catch (error) {
         setError(error.message);
       }
@@ -38,8 +38,3 @@ const FiveDaysWeather = ({ city, location }) => {
 };
 
 export default FiveDaysWeather;
-
-FiveDaysWeather.propTypes = {
-  city: PropTypes.string,
-  location: PropTypes.object,
-};

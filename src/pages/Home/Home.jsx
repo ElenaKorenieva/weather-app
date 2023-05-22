@@ -1,23 +1,15 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { getQuotesApi } from "services/apiQuotes";
 import Location from "components/Location/Location";
 import { getCurrentWeather } from "services/apiCurrentWeather";
-import QoutesItem from "components/QuotesItem/QuotesItem";
-import {
-  formatDayOfMonth,
-  formatShortDayOfWeek,
-  formatMonth,
-  formatClockShort,
-} from "utils/formatDate";
-import Clock from "components/Clock/Clock";
 import IconSelector from "components/IconSelector/IconSelector";
+import { useSetLocation } from "context/LocationProvider";
+import TodayData from "components/TodayData/TodayData";
 
-const Home = ({ city, location }) => {
+const Home = () => {
+  const { city, location } = useSetLocation();
   const [dayWeather, setDayWeather] = useState({});
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
-  const [quotes, setQuotes] = useState([]);
 
   useEffect(() => {
     if (location.lat && location.lon) {
@@ -35,26 +27,15 @@ const Home = ({ city, location }) => {
     }
   }, [location]);
 
-  console.log(dayWeather);
-
-  useEffect(() => {
-    async function getQuotes() {
-      try {
-        const data = await getQuotesApi();
-        setQuotes(data.results);
-      } catch (error) {
-        setError(error.message);
-      }
-    }
-    getQuotes();
-  }, []);
-
-  const date = new Date().toJSON();
-
   return (
-    <>
-      {city && <IconSelector icon={dayWeather?.weather?.[0]?.main} />}
-      {city && <Location city={city} country={dayWeather?.sys?.country} />}
+    <div>
+      <TodayData />
+      <div>
+        <Location city={city} country={dayWeather?.sys?.country} />
+      </div>
+      <>
+        <IconSelector icon={dayWeather?.weather?.[0]?.main} />
+      </>
       <div>
         <p>{Math.round(dayWeather?.main?.temp) || null}</p>
         <div>
@@ -67,13 +48,7 @@ const Home = ({ city, location }) => {
         </div>
       </div>
 
-      <ul>
-        <li>{formatDayOfMonth(date)}</li>
-        <li>{formatShortDayOfWeek(date)}</li>
-        <li>{formatMonth(date)}</li>
-        <li>
-          <Clock />
-        </li>
+      {/* <ul>
         <li>
           {dayWeather?.sys?.sunrise && (
             <span>
@@ -88,15 +63,9 @@ const Home = ({ city, location }) => {
             </span>
           )}
         </li>
-      </ul>
-      <QoutesItem data={quotes} />
-    </>
+      </ul> */}
+    </div>
   );
 };
 
 export default Home;
-
-Home.propTypes = {
-  city: PropTypes.string,
-  location: PropTypes.object,
-};

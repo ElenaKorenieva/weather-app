@@ -1,13 +1,27 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { getQuotesApi } from "services/apiQuotes";
+import s from "./QuotesItem.module.scss";
 
-const QoutesItem = ({ data }) => {
+const QoutesItem = () => {
   const [randomNum, setRandomNum] = useState(0);
+  const [quotes, setQuotes] = useState([]);
+
+  useEffect(() => {
+    async function getQuotes() {
+      try {
+        const data = await getQuotesApi();
+        setQuotes(data.results);
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    }
+    getQuotes();
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setRandomNum(Math.floor(Math.random() * (20 - 1)));
-    }, 3000);
+    }, 30000);
 
     return () => {
       clearInterval(intervalId);
@@ -16,10 +30,10 @@ const QoutesItem = ({ data }) => {
 
   return (
     <div>
-      {data.length > 0 && (
+      {quotes.length > 0 && (
         <>
-          <p>{data[randomNum].content}</p>
-          <p>{data[randomNum].author}</p>
+          <p className={s.container}>{quotes[randomNum].content}</p>
+          <p className={s.container}>{quotes[randomNum].author}</p>
         </>
       )}
     </div>
@@ -27,7 +41,3 @@ const QoutesItem = ({ data }) => {
 };
 
 export default QoutesItem;
-
-QoutesItem.propTypes = {
-  data: PropTypes.array,
-};

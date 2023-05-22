@@ -1,24 +1,18 @@
 import Searchbar from "components/Searchbar/Searchbar";
+import CityPictures from "components/cityPictures/CityPictures";
 import { NavLink, Outlet } from "react-router-dom";
+import s from "./SharedLayout.module.scss";
 
-const SharedLayout = ({ getCityName, background }) => {
+const SharedLayout = () => {
   return (
-    <div
-      style={{
-        backgroundImage: `url(${background})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        width: "100vw",
-        height: "100vh",
-        // position: "fixed",
-      }}
-    >
-      <Searchbar getCityName={getCityName} />
+    <div className={s.bg}>
+      <CityPictures />
+      <Outlet />
+      <Searchbar />
       <nav>
         <NavLink to="/">TODAY</NavLink>
         <NavLink to="/fiveDaysWeather">5 DAYS</NavLink>
       </nav>
-      <Outlet />
     </div>
   );
 };
