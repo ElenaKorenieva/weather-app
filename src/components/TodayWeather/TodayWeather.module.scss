@@ -1,0 +1,43 @@
+.weatherContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 30px;
+}
+
+.flexWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.description {
+  font-size: 12px;
+}
+
+.celsius {
+  font-size: 18px;
+}
+
+.minMax {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.sun {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.sunWrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.iconWrapper {
+  display: block;
+  //   width: 16px;
+}

@@ -1,0 +1,29 @@
+.homeContainer {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.locationWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.cityCountry {
+  margin: auto 0;
+  padding-left: 20px;
+  font-size: 18px;
+}
+
+.weatherWrapper {
+  width: 50vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
+  padding: 5px 10px 5px 10px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  background: #66666641;
+  box-shadow: 10px 10px 30px #1b1b1b;
+}

@@ -1,13 +1,16 @@
-import PropTypes from "prop-types";
+import { useSetLocation } from "context/LocationProvider";
+import s from "./Location.module.scss";
 
-const Location = ({ city, country }) => {
+const Location = () => {
+  const { city, dayWeather } = useSetLocation();
+
   const cityCapitalize = city[0].toUpperCase() + city.slice(1);
-  return <h2>{`${cityCapitalize}, ${country}`}</h2>;
+  return (
+    <div className={s.locationWrapper}>
+      <h2>{`${cityCapitalize}, `}</h2>
+      <h1>{dayWeather?.sys?.country}</h1>
+    </div>
+  );
 };
 
 export default Location;
-
-Location.propTypes = {
-  city: PropTypes.string,
-  country: PropTypes.string,
-};

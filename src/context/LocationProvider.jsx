@@ -1,4 +1,5 @@
 import { getCityLocation } from "services/apiCities";
+import { getCurrentWeather } from "services/apiCurrentWeather";
 import { getPicturesApi } from "services/apiPictures";
 
 const { createContext, useContext, useState, useEffect } = require("react");
@@ -18,6 +19,8 @@ export const LocationProvider = ({ children }) => {
     lat: null,
     lon: null,
   });
+
+  const [dayWeather, setDayWeather] = useState({});
 
   const [pictureBg, setPictureBg] = useState("");
   // eslint-disable-next-line no-unused-vars
@@ -46,6 +49,22 @@ export const LocationProvider = ({ children }) => {
   }, [city]);
 
   useEffect(() => {
+    if (location.lat && location.lon) {
+      setCurrentWeather();
+    }
+
+    async function setCurrentWeather() {
+      try {
+        // const { lat, lon } = location;
+        const data = await getCurrentWeather(location);
+        setDayWeather(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  }, [location]);
+
+  useEffect(() => {
     async function getBackground() {
       try {
         const data = await getPicturesApi(city);
@@ -59,7 +78,7 @@ export const LocationProvider = ({ children }) => {
 
   return (
     <LocationContext.Provider
-      value={{ city, location, pictureBg, error, getCityName }}
+      value={{ city, location, pictureBg, error, getCityName, dayWeather }}
     >
       {children}
     </LocationContext.Provider>
